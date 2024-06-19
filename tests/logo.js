@@ -116,6 +116,8 @@ const outline = [
    ...reverseArray(halfOutline.map(mirrorX))
 ]
 
+console.log(outline)
+
 
 
 
@@ -128,9 +130,10 @@ svgBuilder.artist("black").rectangle(0,0,128,128)
 .rectangle(0,128,128,128)
 .rectangle(128,128,128,128)
 .commit()
-svgBuilder.artist("black").curve(halfOutlineEar.map(tP),"quadratic",0.8).commit()
-svgBuilder.artist("black").curve(reverseArray(halfOutlineEar.map(mirrorX)).map(tP),"quadratic",0.8).commit()
-svgBuilder.artist("black","blue").curve(outline.map(tP),"quadratic",0.8).commit()
+svgBuilder.artist("black",2).curve(halfOutlineEar.map(tP),0.8).commit()
+svgBuilder.artist("black",2).curve(reverseArray(halfOutlineEar.map(mirrorX)).map(tP),0.8).commit()
+svgBuilder.artist("black",3,"white").curve(outline.map(tP),0.8).commit()
+
 
 
 console.log(svgBuilder.compile());
