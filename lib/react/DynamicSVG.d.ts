@@ -4,7 +4,7 @@ declare module '@emotion/react' {
     export const css: (template: TemplateStringsArray, ...args: any[]) => string;
 }
 
-export function useSrcOrTextUrl(text?: string, src?: string, deps: any[]): string | null;
+export function useSVGSrcOrTextUrl(text?: string, src?: string, deps: any[]): string | null;
 
 export interface CssVars {
     [key: string]: string;
@@ -14,8 +14,9 @@ export interface DynamicSVGProps extends HTMLAttributes<SVGElement> {
     src?: string;
     text?: string;
     cssVars?: CssVars;
+    noMangle?: string[];
 }
 
-declare const DynamicSVG: ({ src, text, className, cssVars, ...rest }: DynamicSVGProps) => JSX.Element;
+declare const DynamicSVG: ({ src, text, className, cssVars, noMangle, ...rest }: DynamicSVGProps) => JSX.Element;
 
 export default DynamicSVG

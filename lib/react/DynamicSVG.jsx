@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
-import {css} from '@emotion/react'
+import {v4 as uuidv4} from 'uuid'
+import InlineSVG from 'react-inlinesvg'
 
 /**
  * 
@@ -11,7 +12,7 @@ import {css} from '@emotion/react'
  * @param {*} deps 
  * @returns 
  */
-function useSrcOrTextUrl(text=undefined, src=undefined,deps){
+function useSVGSrcOrTextUrl(text=undefined, src=undefined,deps){
     if(typeof src !== "string" && typeof text!== "string"){
         throw new Error("Either src or text must be defined")
     }
@@ -23,7 +24,7 @@ function useSrcOrTextUrl(text=undefined, src=undefined,deps){
         if(typeof src === "string"){
             setUrl(src)
         }else{
-            setUrl(URL.createObjectURL(new Blob([text],{type:"text/plain"})))
+            setUrl(URL.createObjectURL(new Blob([text],{type:"image/svg+xml"})))
         }
     },[...deps,text,src])
     return url
@@ -33,6 +34,22 @@ function useSrcOrTextUrl(text=undefined, src=undefined,deps){
  * @typedef {Object<string,string>} CssVars
  */
 
+const createSVGProcessor = (noMangle=[])=>(svgText) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgText, 'image/svg+xml');
+    const svgElement = doc.documentElement;
+  
+  
+    svgElement.querySelectorAll('[id]').forEach((element) => {
+      const id = element.getAttribute('id');
+      if (!noMangle.includes(id)) {
+        element.setAttribute('id', `${id}-${Math.random().toString(36).substr(2, 9)}`);
+      }
+    });
+  
+    return new XMLSerializer().serializeToString(svgElement);
+  };
+
 /**
  * @typedef {Object} DynamicSVGProps
  * @extends React.HTMLAttributes<SVGElement>
@@ -40,6 +57,7 @@ function useSrcOrTextUrl(text=undefined, src=undefined,deps){
  * @property {string} [src=undefined]
  * @property {string} [text=undefined]
  * @property {CssVars} [cssVars=undefined]
+ * @property {Array<string>} [noMangle=[]]
  * 
  */
 
@@ -50,24 +68,31 @@ function useSrcOrTextUrl(text=undefined, src=undefined,deps){
  * @throws
  *
  */
-export default function DynamicSVG ({src,text, className,cssVars,...rest}) {
+export default function DynamicSVG ({src,text, className,cssVars,noMangle=[],...rest}) {
     if(typeof src !== "string" && typeof text!== "string"){
         throw new Error("Either src or text must be defined")
     }
     if(typeof src === "string" && typeof text === "string"){
         throw new Error("Either src or text must be defined, not both")
     }
-    const componentCss = css`
-${cssVars?Object.entries(cssVars).map(([k,v])=>(`${k}: ${v};`)).join("\n"):""};
-    `
-    const combinedClassName = `${className} ${componentCss}`
+    const u = uuidv4()
 
-    const url = useSrcOrTextUrl(text,src,[src,text])
+    const componentCss = `
+    .dynamic-svg-${u} {
+        ${cssVars?Object.entries(cssVars).map(([k,v])=>(`${k}: ${v};`)).join("\n"):""};
+    }
+    `
+
+    const combinedClassName = `${className?(className + " "):""}dynamic-svg-${u}`
+
 
     return (
-        <object data={url} type="image/svg+xml" className={combinedClassName} {...rest}>
-          Your browser does not support SVG
-        </object>
+        <>
+        <style>
+            {componentCss}
+        </style>
+        <InlineSVG preProcessor={createSVGProcessor(noMangle)} src={typeof text === "string" ? `data:image/svg+xml;utf8,${encodeURIComponent(text)}`: url} className={combinedClassName} {...rest} />
+        </>
     );
 
 }
