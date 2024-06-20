@@ -2,5 +2,8 @@
   "name": "svg-designer",
   "version": "1.0.0",
   "license": "MIT",
-  "type":"module"
+  "type": "module",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }

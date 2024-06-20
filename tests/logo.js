@@ -132,10 +132,12 @@ svgBuilder.artist("black").rectangle(0,0,128,128)
 .commit()
 svgBuilder.artist("black",2).curve(halfOutlineEar.map(tP),0.8).commit()
 svgBuilder.artist("black",2).curve(reverseArray(halfOutlineEar.map(mirrorX)).map(tP),0.8).commit()
-svgBuilder.artist("black",3,"white").curve(outline.map(tP),0.8).commit()
+svgBuilder.setVar("--theme-primary","red").artist("black",3,"var(--theme-primary)").curve(outline.map(tP),0.8).commit()
 
 
 
-console.log(svgBuilder.compile());
+console.log(svgBuilder.compile(false));
 
-fs.writeFileSync(path.join(outDir, "logo.svg"), svgBuilder.compile());
+fs.writeFileSync(path.join(outDir, "logo.svg"), svgBuilder.compile(false));
+fs.writeFileSync(path.join(outDir, "logo.themable.svg"), svgBuilder.compile(true));
+
