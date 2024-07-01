@@ -1,34 +1,14 @@
-import {useEffect, useState} from 'react'
 import {v4 as uuidv4} from 'uuid'
 import InlineSVG from 'react-inlinesvg'
 
 /**
- * 
- * A React hook to seamlessly access a string as if it were a file
- * 
- * Useful for <img> and <svg> tags
- * 
- * @param {*} text 
- * @param {*} deps 
- * @returns 
+ * @typedef {Object} ViewBox
+ * @property {number} x
+ * @property {number} y
+ * @property {number} width
+ * @property {number} height
  */
-function useSVGSrcOrTextUrl(text=undefined, src=undefined,deps){
-    if(typeof src !== "string" && typeof text!== "string"){
-        throw new Error("Either src or text must be defined")
-    }
-    if(typeof src === "string" && typeof text === "string"){
-        throw new Error("Either src or text must be defined, not both")
-    }
-    const [url,setUrl] = useState(null)
-    useEffect(()=>{
-        if(typeof src === "string"){
-            setUrl(src)
-        }else{
-            setUrl(URL.createObjectURL(new Blob([text],{type:"image/svg+xml"})))
-        }
-    },[...deps,text,src])
-    return url
-}
+
 
 /**
  * @typedef {Object<string,string>} CssVars
@@ -58,6 +38,7 @@ const createSVGProcessor = (noMangle=[])=>(svgText) => {
  * @property {string} [text=undefined]
  * @property {CssVars} [cssVars=undefined]
  * @property {Array<string>} [noMangle=[]]
+ * @property {Viewbox|undefined} [viewBox=undefined] 
  * 
  */
 
@@ -68,7 +49,7 @@ const createSVGProcessor = (noMangle=[])=>(svgText) => {
  * @throws
  *
  */
-export default function DynamicSVG ({src,text, className,cssVars,noMangle=[],...rest}) {
+export default function DynamicSVG ({src,text, className,cssVars,noMangle=[],viewBox,...rest}) {
     if(typeof src !== "string" && typeof text!== "string"){
         throw new Error("Either src or text must be defined")
     }
@@ -85,13 +66,14 @@ export default function DynamicSVG ({src,text, className,cssVars,noMangle=[],...
 
     const combinedClassName = `${className?(className + " "):""}dynamic-svg-${u}`
 
+    const viewBoxString = viewBox ?`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}` : undefined
 
     return (
         <>
         <style>
             {componentCss}
         </style>
-        <InlineSVG preProcessor={createSVGProcessor(noMangle)} src={typeof text === "string" ? `data:image/svg+xml;utf8,${encodeURIComponent(text)}`: url} className={combinedClassName} {...rest} />
+        <InlineSVG viewBox={viewBoxString} preProcessor={createSVGProcessor(noMangle)} src={typeof text === "string" ? `data:image/svg+xml;utf8,${encodeURIComponent(text)}`: url} className={combinedClassName} {...rest} />
         </>
     );
 
