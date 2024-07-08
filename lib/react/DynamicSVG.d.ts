@@ -1,16 +1,6 @@
 import { HTMLAttributes } from "react";
 import { type SerializedStyles } from "@emotion/react";
 
-declare module "@emotion/react" {
-  export const css: (template: TemplateStringsArray, ...args: any[]) => SerializedStyles;
-}
-
-export function useSVGSrcOrTextUrl(
-  text?: string,
-  src?: string,
-  deps: any[]
-): string | null;
-
 export interface CssVars {
   [key: string]: string;
 }
