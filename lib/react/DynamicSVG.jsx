@@ -95,11 +95,6 @@ export default function DynamicSVG({
 
   classNames.push(`dynamic-svg-${u}`);
 
-  const cn = css ? css.className : "";
-
-  if (cn) {
-    classNames.push(cn);
-  }
 
   const combinedClassName = classNammes.join(" ");
 
@@ -111,6 +106,7 @@ export default function DynamicSVG({
     <>
       <style>{componentCss}</style>
       <InlineSVG
+        css={css}
         viewBox={viewBoxString}
         preProcessor={createSVGProcessor(noMangle)}
         src={
