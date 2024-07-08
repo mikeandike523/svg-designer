@@ -96,7 +96,7 @@ export default function DynamicSVG({
   classNames.push(`dynamic-svg-${u}`);
 
 
-  const combinedClassName = classNammes.join(" ");
+  const combinedClassName = classNames.join(" ");
 
   const viewBoxString = viewBox
     ? `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`
