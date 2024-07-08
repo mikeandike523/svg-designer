@@ -1,4 +1,5 @@
-import { HTMLAttributes, JSXElementConstructor } from "react";
+import { HTMLAttributes } from "react";
+import { type SerializedStyles } from "@emotion/react";
 
 declare module "@emotion/react" {
   export const css: (template: TemplateStringsArray, ...args: any[]) => string;
@@ -27,6 +28,7 @@ export interface DynamicSVGProps extends HTMLAttributes<SVGElement> {
         height: number;
       }
     | undefined;
+  css?: SerializedStyles;
 }
 
 declare const DynamicSVG: ({
