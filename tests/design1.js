@@ -11,7 +11,6 @@ const { __dirname } = parseImportMetaUrl(import.meta.url);
 
 const outDir = path.join(__dirname, "out");
 
-console.log(outDir);
 
 const svgBuilder = new SVGBuilder(256, 256);
 
@@ -25,6 +24,5 @@ svgBuilder.addPath(
   ])
 );
 
-console.log(svgBuilder.compile());
 
 fs.writeFileSync(path.join(outDir, "design1.svg"), svgBuilder.compile());

@@ -72,7 +72,6 @@ const { __dirname } = parseImportMetaUrl(import.meta.url);
 
 const outDir = path.join(__dirname, "out");
 
-console.log(outDir);
 
 const svgBuilder = new SVGBuilder(256, 256);
 
@@ -116,7 +115,6 @@ const outline = [
    ...reverseArray(halfOutline.map(mirrorX))
 ]
 
-console.log(outline)
 
 
 
@@ -136,7 +134,6 @@ svgBuilder.setVar("--theme-primary","red").artist("black",3,"var(--theme-primary
 
 
 
-console.log(svgBuilder.compile(false));
 
 fs.writeFileSync(path.join(outDir, "logo.svg"), svgBuilder.compile(false));
 fs.writeFileSync(path.join(outDir, "logo.themable.svg"), svgBuilder.compile(true));
