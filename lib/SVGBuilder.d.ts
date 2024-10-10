@@ -152,6 +152,7 @@ export class Artist {
   );
 
   rectangle(x: number, y: number, width: number, height: number): Artist;
+  rectangle({ x: number, y: number, width: number, height: number }): Artist;
   circle(center: { x: number; y: number }, radius: number): Artist;
   ellipse(center: { x: number; y: number }, rx: number, ry: number): Artist;
   line(A: { x: number; y: number }, B: { x: number; y: number }): Artist;
@@ -159,6 +160,7 @@ export class Artist {
   curve(path: [number, number][], tension?: number): Artist;
   compile(): string;
   commit(): SVGBuilder;
+  twoPointRectangle(point1: [number, number], point2: [number, number]): Artist;
 }
 
 export default class SVGBuilder {
@@ -199,5 +201,5 @@ export default class SVGBuilder {
     width: number;
     height: number;
   };
-  adjustViewboxToFitContent(): this
+  adjustViewboxToFitContent(paddingX: number = 0, paddingY: number = 0): this;
 }

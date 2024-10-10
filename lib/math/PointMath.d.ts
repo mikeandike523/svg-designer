@@ -13,5 +13,5 @@ export default class PointMath {
   static termByTermMultiplied(p1: Point, p2: Point): Point;
   static toXYObject(p: Point): { x: number; y: number };
   static directionVector(theta: number): Point;
-  static bowAtMidpoint(p1: Point, p2: Point,offset:number): Point;
+  static bowAtMidpoint(p1: Point, p2: Point,offset:number): [Point,Point,Point];
 }
